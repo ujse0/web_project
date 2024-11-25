@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to <%=shopName%></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <nav>
+      <h1><a href="/"> <%=shopName%> </a></h1>
+      <% if(!user) { %>
+      <p>
+        <a href="http://localhost:8000/login">LOGIN</a> /
+        <a href="http://localhost:8000/register">REGISTER</a>
+      </p>
+      <% } else { %>
+      <p><a href="http://localhost:8000/post">PRODUCT LIST</a></p>
+      <p><a href="http://localhost:8000/post/add">ADD PRODUCT</a></p>
+      <p><a href="http://localhost:8000/my">MY</a></p>
+      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <% } %>
+    </nav>
+    <main>
+      <div class="product-list-container">
+        <h1>Product List</h1>
+        <div class="product-grid">
+          <% products.forEach(function(product) { %>
+          <div class="product-card">
+            <h2><%= product.name %></h2>
+            <div class="product-info">
+              <p class="price">$<%= product.price %></p>
+              <p class="location"><%= product.location %></p>
+              <p class="seller">Seller: <%= product.user_name %></p>
+              <p class="status">
+                Status:
+                <span class="status-<%= product.status %>"
+                  ><%= product.status %></span
+                >
+              </p>
+              <p class="date"><%= formatFunc(product.created_at) %></p>
+            </div>
+            <div class="product-actions">
+              <a href="/post/<%= product.id %>" class="button view"
+                >View Details</a
+              >
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

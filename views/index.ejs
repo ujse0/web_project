@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to <%=shopData.shopName%></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+
+  <body>
+    <nav>
+      <h1><a href="/"> MARKETPLACE </a></h1>
+      <% if(!user) { %>
+      <p>
+        <a href="http://localhost:8000/login">LOGIN</a> /
+        <a href="http://localhost:8000/register">REGISTER</a>
+      </p>
+
+      <% } else { %>
+      <p><a href="http://localhost:8000/post">PRODUCT LIST</a></p>
+      <p><a href="http://localhost:8000/post/add">ADD PRODUCT</a></p>
+      <p><a href="http://localhost:8000/my">MY</a></p>
+      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <% } %>
+    </nav>
+    <main>
+      <div id="home-container">
+        <div id="img-container">
+          <div id="home-text">
+            <h2>Welcome to MARKETPLACE</h2>
+            <p>
+              Discover the perfect platform for buying and selling with ease!
+              Our peer-to-peer marketplace connects you directly with buyers and
+              sellers.
+            </p>
+            <p>
+              We offer a <span class="highlight">seamless experience</span> to
+              list, search, and trade items with features like:
+            </p>
+            <ul>
+              <li>Detailed product listings</li>
+              <li>Real-time chat</li>
+              <li>Customizable transaction statuses</li>
+            </ul>
+            <p>Start your next deal today!</p>
+          </div>
+          <img src="/home.avif" alt="Marketplace illustration" />
+        </div>
+      </div>
+    </main>
+  </body>
+  <script>
+    window.onload = () => {
+      if (new URL(location.href).searchParams.get("loginError")) {
+        alert(new URL(location.href).searchParams.get("loginError"));
+        window.location.href = "http://localhost:8000/login";
+      }
+    };
+  </script>
+</html>

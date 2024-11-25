@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to <%=shopName%></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <nav>
+      <h1><a href="/"> <%=shopName%> </a></h1>
+      <% if(!user) { %>
+      <p>
+        <a href="http://localhost:8000/login">LOGIN</a> /
+        <a href="http://localhost:8000/register">REGISTER</a>
+      </p>
+      <% } else { %>
+      <p><a href="http://localhost:8000/post">PRODUCT LIST</a></p>
+      <p><a href="http://localhost:8000/post/add">ADD PRODUCT</a></p>
+      <p><a href="http://localhost:8000/my">MY</a></p>
+      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <% } %>
+    </nav>
+    <main>
+      <div class="my-page">
+        <div class="user-info">
+          <h2>My Profile</h2>
+          <p>Username: <%= user.user_name %></p>
+          <p>Introduction: <%= user.introduce || 'No introduction yet' %></p>
+          <a href="/my/update" class="button">Update Profile</a>
+        </div>
+
+        <div class="my-products">
+          <h2>My Products</h2>
+          <% if(myProducts.length === 0) { %>
+          <p>You haven't listed any products yet.</p>
+          <% } else { %>
+          <div class="product-grid">
+            <% myProducts.forEach(product => { %>
+            <div class="product-card">
+              <h3><%= product.name %></h3>
+              <p class="price">$<%= product.price %></p>
+              <p class="status"><%= product.status %></p>
+              <p class="date"><%= formatFunc(product.created_at) %></p>
+              <a href="/post/<%= product.id %>" class="button">View Details</a>
+            </div>
+            <% }); %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

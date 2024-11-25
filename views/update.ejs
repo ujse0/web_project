@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to <%=shopData.shopName%></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+
+  <body>
+    <nav>
+      <h1><a href="/"> <%=shopData.shopName%> </a></h1>
+      <% if(!user) { %>
+      <p>
+        <a href="http://localhost:8000/login">LOGIN</a> /
+        <a href="http://localhost:8000/register">REGISTER</a>
+      </p>
+
+      <% } else { %>
+      <p><a href="http://localhost:8000/post">PRODUCT LIST</a></p>
+      <p><a href="http://localhost:8000/post/add">ADD PRODUCT</a></p>
+      <p><a href="http://localhost:8000/my">MY</a></p>
+      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <% } %>
+    </nav>
+    <main>
+      <h1 class="page-title">Update Product</h1>
+      <form class="add-form" action="/post/update/<%= product.id %>" method="post">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value="<%= user.user_name %>"
+            readonly
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="name">Product Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            value="<%= product.name %>"
+            required 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            value="<%= product.price %>"
+            required 
+            step="0.01" 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input 
+            type="text" 
+            id="location" 
+            name="location" 
+            value="<%= product.location %>"
+            required 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status" required>
+            <option value="reserved" <%= product.status === 'reserved' ? 'selected' : '' %>>Reserved</option>
+            <option value="completed" <%= product.status === 'completed' ? 'selected' : '' %>>Completed</option>
+            <option value="cancelled" <%= product.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="4"
+            required
+          ><%= product.description %></textarea>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit">Update Product</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FORGOT PASSWORD</title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+
+  <body>
+    <nav>
+      <h1><a href="/"> <%=shopData.shopName%> </a></h1>
+      <% if(!user) { %>
+      <p>
+        <a href="http://localhost:8000/login">LOGIN</a> /
+        <a href="http://localhost:8000/register">REGISTER</a>
+      </p>
+
+      <% } else { %>
+      <p><a href="http://localhost:8000/post">EVENT LIST</a></p>
+      <p><a href="http://localhost:8000/post/add">ADD EVENT</a></p>
+      <p><a href="http://localhost:8000/my">MY</a></p>
+      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <% } %>
+    </nav>
+    <main>
+      <h1>Find passwrod</h1>
+      <h2>if below answer is correct password will show.</h2>
+      <form action="/forgot" method="post">
+        <input type="text" name="username" placeholder="id" />
+        <h3>input birthdate as YYMMDD.</h3>
+        <input type="text" name="sentence" placeholder="answer of question" />
+        <input type="submit" value="submit" />
+      </form>
+    </main>
+    <script>
+      window.onload = () => {
+        if (new URL(location.href).searchParams.get("error")) {
+          alert(new URL(location.href).searchParams.get("error"));
+        }
+        if (new URL(location.href).searchParams.get("pwd")) {
+          alert(`비밀번호 : ${new URL(location.href).searchParams.get("pwd")}`);
+          location.href = "http://localhost:8000/login";
+        }
+      };
+    </script>
+  </body>
+</html>

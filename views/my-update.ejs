@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to <%=shopData.shopName%></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+
+  <body>
+    <nav>
+      <h1><a href="/"> <%=shopData.shopName%> </a></h1>
+      <% if(!user) { %>
+      <p>
+        <a href="http://localhost:8000/login">LOGIN</a> /
+        <a href="http://localhost:8000/register">REGISTER</a>
+      </p>
+
+      <% } else { %>
+      <p><a href="http://localhost:8000/post">EVENT LIST</a></p>
+      <p><a href="http://localhost:8000/post/add">ADD EVENT</a></p>
+      <p><a href="http://localhost:8000/my">MY</a></p>
+      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <% } %>
+    </nav>
+    <main>
+      <h3>my info</h3>
+
+      <form action="/my/update" method="post">
+        <div>
+          ID :
+          <input
+            type="text"
+            value="<%= user.user_name%>"
+            name="username"
+            readonly
+          />
+        </div>
+
+        <h3>self introduce.</h3>
+        <div>
+          <textarea
+            style="width: 300px; height: 120px"
+            type="text"
+            name="introduce"
+          >
+<%= user.introduce%></textarea
+          >
+        </div>
+        <input type="submit" value="UPDATE" />
+      </form>
+    </main>
+  </body>
+  <script></script>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to <%=shopData.shopName%></title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <nav>
+      <h1><a href="/"> <%=shopData.shopName%> </a></h1>
+      <% if(!user) { %>
+      <p>
+        <a href="http://localhost:8000/login">LOGIN</a> /
+        <a href="http://localhost:8000/register">REGISTER</a>
+      </p>
+      <% } else { %>
+      <p><a href="http://localhost:8000/post">PRODUCT LIST</a></p>
+      <p><a href="http://localhost:8000/post/add">ADD PRODUCT</a></p>
+      <p><a href="http://localhost:8000/my">MY</a></p>
+      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <% } %>
+    </nav>
+    <main>
+      <div class="product-detail">
+        <h1><%= product.name %></h1>
+
+        <div class="product-info">
+          <p class="seller">
+            Seller: <strong><%= product.user_name %></strong>
+          </p>
+          <p class="price">Price: <strong>$<%= product.price %></strong></p>
+          <p class="location">Location: <%= product.location %></p>
+          <p class="status">
+            Status:
+            <span class="status-<%= product.status %>"
+              ><%= product.status %></span
+            >
+          </p>
+          <p class="created">
+            Listed on: <%= new Date(product.created_at).toLocaleDateString() %>
+          </p>
+        </div>
+
+        <div class="product-description">
+          <h3>Description</h3>
+          <p><%= product.description %></p>
+        </div>
+
+        <div class="product-actions">
+          <% if (user.user_name === product.user_name) { %>
+          <a href="/post/update/<%= product.id %>" class="button edit"
+            >Edit Product</a
+          >
+          <form
+            action="/post/delete/<%= product.id %>"
+            method="post"
+            style="display: inline"
+          >
+            <button type="submit" class="button delete">Delete Product</button>
+          </form>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
