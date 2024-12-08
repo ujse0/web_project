@@ -23,7 +23,12 @@
     </nav>
     <main>
       <h1 class="page-title">ADD PRODUCT</h1>
-      <form class="add-form" action="/post/add" method="post">
+      <form
+        class="add-form"
+        action="/post/add"
+        method="post"
+        enctype="multipart/form-data"
+      >
         <div class="form-group">
           <label for="username">Username</label>
           <input
@@ -58,6 +63,17 @@
             rows="4"
             required
           ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="image">Product Image</label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            required
+          />
         </div>
 
         <div class="form-submit">

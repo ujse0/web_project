@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    container_name: marketplace-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=0000
+      - MYSQL_DATABASE=marketplace
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

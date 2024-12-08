@@ -37,7 +37,7 @@
           alert(new URL(location.href).searchParams.get("error"));
         }
         if (new URL(location.href).searchParams.get("pwd")) {
-          alert(`비밀번호 : ${new URL(location.href).searchParams.get("pwd")}`);
+          alert(`Password : ${new URL(location.href).searchParams.get("pwd")}`);
           location.href = "http://localhost:8000/login";
         }
       };

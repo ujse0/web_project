@@ -1,20 +1,20 @@
 const passport = require("passport");
 const local = require("./localStrategy");
 
-module.exports = () => {
+module.exports = (passport, db) => {
   passport.serializeUser((user, done) => {
-    console.log(user);
-    done(null, user.user_name);
-  });
-  passport.deserializeUser(async (username, done) => {
-    const userFindQuery = `select * from user where user_name='${username}'`;
-    await db.query(userFindQuery, async (err, results) => {
-      if (err) done(err);
-      if (results.length !== 0) {
-        done(null, results[0]);
-      }
-    });
+    done(null, user.id);
   });
 
-  local();
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const [rows] = await db.query("SELECT * FROM user WHERE id = ?", [id]);
+      const user = rows[0];
+      done(null, user);
+    } catch (error) {
+      done(error);
+    }
+  });
+
+  local(passport, db);
 };

@@ -23,7 +23,7 @@
     </nav>
     <main>
       <h1 class="page-title">Update Product</h1>
-      <form class="add-form" action="/post/update/<%= product.id %>" method="post">
+      <form class="add-form" action="/post/update/<%= product.id %>" method="post" enctype="multipart/form-data">
         <div class="form-group">
           <label for="username">Username</label>
           <input
@@ -72,9 +72,9 @@
         <div class="form-group">
           <label for="status">Status</label>
           <select id="status" name="status" required>
+            <option value="saled" <%= product.status === 'saled' ? 'selected' : '' %>>On Sale</option>
             <option value="reserved" <%= product.status === 'reserved' ? 'selected' : '' %>>Reserved</option>
             <option value="completed" <%= product.status === 'completed' ? 'selected' : '' %>>Completed</option>
-            <option value="cancelled" <%= product.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
           </select>
         </div>
 
@@ -86,6 +86,14 @@
             rows="4"
             required
           ><%= product.description %></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="image">Product Image</label>
+          <input type="file" id="image" name="image" accept="image/*" />
+          <% if (product.image_url) { %>
+            <img src="<%= product.image_url %>" alt="Current product image" style="max-width: 200px;" />
+          <% } %>
         </div>
 
         <div class="form-submit">

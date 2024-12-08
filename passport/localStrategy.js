@@ -1,8 +1,7 @@
-const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 
-module.exports = () => {
+module.exports = (passport, db) => {
   passport.use(
     new LocalStrategy(
       {
@@ -11,26 +10,40 @@ module.exports = () => {
       },
       async (username, password, done) => {
         try {
-          const userFindQuery = `select * from user where user_name='${username}'`;
-          db.query(userFindQuery, async (err, results) => {
-            if (err) {
-              console.error(err);
-              return next(err);
-            }
-            if (results.length === 0) {
-              done(null, false, { message: "Not registered User." });
-            } else {
-              const result = await bcrypt.compare(password, results[0].pwd);
-              if (result) {
-                done(null, results[0]);
-              } else {
-                done(null, false, { message: "password not match." });
-              }
-            }
+          const [rows] = await db.execute(
+            "SELECT * FROM user WHERE user_name = ?",
+            [username]
+          );
+
+          if (rows.length === 0) {
+            return done(null, false, {
+              message: "No exist user.",
+            });
+          }
+
+          const user = rows[0];
+
+          console.log("Input password:", password);
+          console.log("Stored user:", user);
+
+          if (!password || !user.pwd) {
+            console.error("Password or stored hash is missing");
+            return done(null, false, {
+              message: "Incorrect login information.",
+            });
+          }
+
+          const result = await bcrypt.compare(password, user.pwd);
+
+          if (result) {
+            return done(null, user);
+          }
+          return done(null, false, {
+            message: "Incorrect password.",
           });
         } catch (error) {
-          console.error(error);
-          done(error);
+          console.error("Login error:", error);
+          return done(error);
         }
       }
     )

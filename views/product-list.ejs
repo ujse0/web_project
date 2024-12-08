@@ -22,6 +22,21 @@
     <main>
       <div class="product-list-container">
         <h1>Product List</h1>
+
+        <form class="search-form" action="/post" method="get">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search products..."
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+          />
+          <select name="sort" onchange="this.form.submit()">
+            <option value="desc" <%= currentSort === 'desc' ? 'selected' : '' %>>Latest</option>
+            <option value="asc" <%= currentSort === 'asc' ? 'selected' : '' %>>Oldest</option>
+          </select>
+          <button type="submit">Search</button>
+        </form>
+
         <div class="product-grid">
           <% products.forEach(function(product) { %>
           <div class="product-card">

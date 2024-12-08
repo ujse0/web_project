@@ -8,34 +8,26 @@ const router = express.Router();
 router.post("/register", isNotLoggedIn, async (req, res, next) => {
   const { username, password, password_sentence, introduce } = req.body;
 
-  const userFindQuery = `select * from user where user_name='${username}'`;
-  db.query(userFindQuery, async (err, results) => {
-    if (err) {
-      console.error(err);
-      return next(err);
-    }
-    if (results.length === 0) {
+  try {
+    const [existingUsers] = await db.query(
+      "SELECT * FROM user WHERE user_name = ?",
+      [username]
+    );
+
+    if (existingUsers.length === 0) {
       const hash = await bcrypt.hash(password, 12);
-      const userCreateQuery = `INSERT INTO user (user_name,pwd,origin_pwd,password_sentence,introduce) VALUES
-        (?,?,?,?,?)`;
-      db.query(
-        userCreateQuery,
-        [username, hash, password, password_sentence, introduce],
-        async (err, results) => {
-          if (err) {
-            console.log(err);
-            res.send(err);
-          } else {
-            res.redirect("http://localhost:8000/login");
-          }
-        }
+      await db.query(
+        "INSERT INTO user (user_name, pwd, origin_pwd, password_sentence, introduce) VALUES (?, ?, ?, ?, ?)",
+        [username, hash, password, password_sentence, introduce]
       );
+      res.redirect("http://localhost:8000/login");
     } else {
       return res.redirect("http://localhost:8000/register?error=exist");
     }
-  });
-
-  //   return res.redirect("/login");
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
 });
 
 router.post("/login", isNotLoggedIn, (req, res, next) => {

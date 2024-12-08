@@ -21,6 +21,11 @@
     </nav>
     <main>
       <div class="product-detail">
+        <% if (product.image_url) { %>
+        <div class="product-image">
+          <img src="<%= product.image_url %>" alt="<%= product.name %>" />
+        </div>
+        <% } %>
         <h1><%= product.name %></h1>
 
         <div class="product-info">
@@ -46,9 +51,9 @@
         </div>
 
         <div class="product-actions">
-          <% if (user.user_name === product.user_name) { %>
+          <% if (user && user.user_name === product.user_name) { %>
           <a href="/post/update/<%= product.id %>" class="button edit"
-            >Edit Product</a
+            >Product Update</a
           >
           <form
             action="/post/delete/<%= product.id %>"
@@ -57,9 +62,115 @@
           >
             <button type="submit" class="button delete">Delete Product</button>
           </form>
+          <button onclick="openChat()" class="button chat">View Chat Window</button>
+          <% } else if (user) { %>
+          <button onclick="openChat()" class="button chat">
+            Chat with seller
+          </button>
           <% } %>
         </div>
       </div>
     </main>
+
+    <!-- chat modal -->
+    <div id="chatModal" class="chat-modal">
+      <div class="chat-content">
+        <div class="chat-header">
+          <h3>
+            <%= user.user_name === product.user_name ? 'My Chat' :
+            product.user_name + 'chat' %>
+          </h3>
+          <span class="close-chat">&times;</span>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+          <input
+            type="text"
+            id="messageInput"
+            placeholder="Type massage"
+            onkeypress="handleKeyPress(event)"
+          />
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openChat() {
+        document.getElementById("chatModal").style.display = "block";
+        loadChatHistory();
+        scrollToBottom();
+      }
+
+      function loadChatHistory() {
+        fetch(`/chat/history/<%= product.id %>`)
+          .then((response) => response.json())
+          .then((messages) => {
+            const chatMessages = document.getElementById("chatMessages");
+            chatMessages.innerHTML = messages
+              .map(
+                (msg) => `
+              <div class="message ${
+                msg.sender_name === "<%= user.user_name %>"
+                  ? "sent"
+                  : "received"
+              }">
+                <div class="message-header">
+                  <span class="message-sender">${msg.sender_name}</span>
+                  <span class="message-time">${new Date(
+                    msg.timestamp
+                  ).toLocaleTimeString()}</span>
+                </div>
+                <div class="message-content">${msg.message}</div>
+              </div>
+            `
+              )
+              .join("");
+            scrollToBottom();
+          });
+      }
+
+      function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const message = messageInput.value.trim();
+
+        if (message) {
+          fetch("/chat/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              productId: "<%= product.id %>",
+              message: message,
+            }),
+          })
+            .then((response) => response.json())
+            .then(() => {
+              messageInput.value = "";
+              loadChatHistory();
+            });
+        }
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          sendMessage();
+        }
+      }
+
+      function scrollToBottom() {
+        const chatMessages = document.getElementById("chatMessages");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      document.querySelector(".close-chat").onclick = function () {
+        document.getElementById("chatModal").style.display = "none";
+      };
+
+      // Refresh chat history every second
+      setInterval(loadChatHistory, 1000);
+    </script>
   </body>
 </html>
