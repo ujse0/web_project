@@ -1,4 +1,3 @@
-const fs = require("fs");
 var express = require("express");
 var router = express.Router();
 router.use((req, res, next) => {
@@ -7,7 +6,7 @@ router.use((req, res, next) => {
 });
 const guard = (req, res, next) => {
   if (!req.user) {
-    return res.redirect("https://www.doc.gold.ac.uk/usr/113/login?error=session_expired");
+    return res.redirect("/login?error=session_expired");
   }
   next();
 };
@@ -65,7 +64,7 @@ router.post("/my/update", guard, async (req, res) => {
   const updateQuery = "update user set introduce=? where user_name=?";
   try {
     await db.query(updateQuery, [introduce, username]);
-    res.redirect("https://www.doc.gold.ac.uk/usr/113/my");
+    res.redirect("/my");
   } catch (err) {
     console.log(err);
     res.status(500).send("Error updating user");
@@ -91,14 +90,12 @@ router.post("/forgot", (req, res) => {
         ? (isEqual = true)
         : (isEqual = false);
       if (isEqual) {
-        res.redirect(
-          `https://www.doc.gold.ac.uk/usr/113/forgot-password?pwd=${result[0].origin_pwd}`
-        );
+        res.redirect(`/forgot-password?pwd=${result[0].origin_pwd}`);
       } else {
-        res.redirect("https://www.doc.gold.ac.uk/usr/113/forgot-password?error=wrong-date");
+        res.redirect("/forgot-password?error=wrong-date");
       }
     } else {
-      res.redirect("https://www.doc.gold.ac.uk/usr/113/forgot-password?error=not-found-id");
+      res.redirect("/forgot-password?error=not-found-id");
     }
   });
 });
@@ -150,7 +147,7 @@ router.post("/apply/delete/:id", guard, (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.redirect(`https://www.doc.gold.ac.uk/usr/113/post/${req.params.id}`);
+        res.redirect(`/post/${req.params.id}`);
       }
     }
   );
@@ -158,7 +155,7 @@ router.post("/apply/delete/:id", guard, (req, res) => {
 router.post("/participant/delete/:id", guard, (req, res) => {
   if (req.body.username == req.user.user_name) {
     res.redirect(
-      `https://www.doc.gold.ac.uk/usr/113/post/update/${req.params.id}?error=Event-Holder-cannot-be-deleted`
+      `/post/update/${req.params.id}?error=Event-Holder-cannot-be-deleted`
     );
   } else {
     const userExistQuery =
@@ -169,7 +166,7 @@ router.post("/participant/delete/:id", guard, (req, res) => {
       (err, result1) => {
         if (result1.length < 1) {
           res.redirect(
-            `https://www.doc.gold.ac.uk/usr/113/post/update/${req.params.id}?error=User-Not_Exist-In-Event`
+            `/post/update/${req.params.id}?error=User-Not_Exist-In-Event`
           );
         } else {
           const deleteParticipantQuery =
@@ -181,9 +178,7 @@ router.post("/participant/delete/:id", guard, (req, res) => {
               if (err) {
                 console.log(err);
               } else {
-                res.redirect(
-                  `https://www.doc.gold.ac.uk/usr/113/post/update/${req.params.id}`
-                );
+                res.redirect(`/post/update/${req.params.id}`);
               }
             }
           );
@@ -202,7 +197,7 @@ router.post("/participant/:id", guard, (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.redirect(`https://www.doc.gold.ac.uk/usr/113/post/${req.params.id}`);
+        res.redirect(`/post/${req.params.id}`);
       }
     }
   );
@@ -266,7 +261,7 @@ router.get("/post/update/:id", guard, async (req, res) => {
       });
     }
 
-    // CHECK OWNER OF PRODUCT
+
     if (req.user.id !== results[0].seller_id) {
       return res.status(403).render("error", {
         message: "You don't have permission to edit this product",
@@ -367,7 +362,7 @@ router.get("/post/:id", guard, async (req, res) => {
 
 router.post("/post/delete/:id", guard, async (req, res) => {
   try {
-    // CHECK PRODUCT OWNER
+
     const [product] = await db.query(
       "SELECT user_id FROM product WHERE id = ?",
       [req.params.id]
@@ -383,7 +378,6 @@ router.post("/post/delete/:id", guard, async (req, res) => {
         .send("You don't have permission to delete this product");
     }
 
-    // delete product image
     const [imageResult] = await db.query(
       "SELECT image_url FROM product WHERE id = ?",
       [req.params.id]
@@ -401,7 +395,7 @@ router.post("/post/delete/:id", guard, async (req, res) => {
       });
     }
 
-    // delete product
+
     await db.query("DELETE FROM product WHERE id = ?", [req.params.id]);
     res.redirect("/post");
   } catch (err) {
@@ -410,7 +404,7 @@ router.post("/post/delete/:id", guard, async (req, res) => {
   }
 });
 
-// get chat history
+
 router.get("/chat/history/:productId", guard, async (req, res) => {
   try {
     const [results] = await db.query(
@@ -431,12 +425,12 @@ router.get("/chat/history/:productId", guard, async (req, res) => {
   }
 });
 
-// send message
+
 router.post("/chat/send", guard, async (req, res) => {
   const { productId, message } = req.body;
 
   try {
-    // product information
+
     const [productResult] = await db.query(
       `SELECT user_id as seller_id FROM product WHERE id = ?`,
       [productId]
@@ -450,7 +444,7 @@ router.post("/chat/send", guard, async (req, res) => {
     const senderId = req.user.id;
     const receiverId = sellerId;
 
-    // save message
+
     await db.query(
       `INSERT INTO chat (sender_id, receiver_id, product_id, message)
        VALUES (?, ?, ?, ?)`,
@@ -466,14 +460,14 @@ router.post("/chat/send", guard, async (req, res) => {
 
 const { body, validationResult } = require("express-validator");
 
-// Validation Rules for Product Creation/Update
+
 const productValidationRules = [
   body("name")
     .trim()
     .isLength({ min: 2, max: 100 })
-    .withMessage("The product name must be between 2 and 100 characters.")
+    .withMessage("The product name must be between 2 and 100 characters")
     .escape(),
-  body("price").isFloat({ min: 0 }).withMessage("The price must be greater than 0."),
+  body("price").isFloat({ min: 0 }).withMessage("The price must be greater than 0"),
   body("location")
     .trim()
     .isLength({ min: 2, max: 100 })
@@ -487,16 +481,16 @@ const productValidationRules = [
   body("status")
     .optional()
     .isIn(["saled", "reserved", "completed"])
-    .withMessage("Invalid status values"),
+    .withMessage("Invalid status"),
 ];
 
-// Middleware for processing validation results
+
 const validateRequest = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).render("error", {
-      message: "Invalid input values",
-      error: errors.array(),  
+      message: "Incorrect input value",
+      error: errors.array(),
       shopName: shopData.shopName,
       user: req.user,
     });

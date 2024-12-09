@@ -29,7 +29,7 @@ module.exports = (passport, db) => {
           if (!password || !user.pwd) {
             console.error("Password or stored hash is missing");
             return done(null, false, {
-              message: "Incorrect login information.",
+              message: "incorrect login info.",
             });
           }
 
@@ -39,7 +39,7 @@ module.exports = (passport, db) => {
             return done(null, user);
           }
           return done(null, false, {
-            message: "Incorrect password.",
+            message: "Invalid password.",
           });
         } catch (error) {
           console.error("Login error:", error);

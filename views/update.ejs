@@ -10,15 +10,15 @@
       <h1><a href="/"> <%=shopData.shopName%> </a></h1>
       <% if(!user) { %>
       <p>
-        <a href="https://www.doc.gold.ac.uk/usr/113/login">LOGIN</a> /
-        <a href="https://www.doc.gold.ac.uk/usr/113/register">REGISTER</a>
+        <a href="/login">LOGIN</a> /
+        <a href="/register">REGISTER</a>
       </p>
 
       <% } else { %>
-      <p><a href="https://www.doc.gold.ac.uk/usr/113/post">PRODUCT LIST</a></p>
-      <p><a href="https://www.doc.gold.ac.uk/usr/113/post/add">ADD PRODUCT</a></p>
-      <p><a href="https://www.doc.gold.ac.uk/usr/113/my">MY</a></p>
-      <p><a href="https://www.doc.gold.ac.uk/usr/113/auth/logout">LOGOUT</a></p>
+      <p><a href="/post">PRODUCT LIST</a></p>
+      <p><a href="/post/add">ADD PRODUCT</a></p>
+      <p><a href="/my">MY</a></p>
+      <p><a href="/auth/logout">LOGOUT</a></p>
       <% } %>
     </nav>
     <main>
