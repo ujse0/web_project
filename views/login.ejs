@@ -10,26 +10,26 @@
       <h1><a href="/"> <%=shopData.shopName%> </a></h1>
       <% if(!user) { %>
       <p>
-        <a href="/login">LOGIN</a> /
-        <a href="/register">REGISTER</a>
+        <a href="https://www.doc.gold.ac.uk/usr/113/login">LOGIN</a> /
+        <a href="https://www.doc.gold.ac.uk/usr/113/register">REGISTER</a>
       </p>
 
       <% } else { %>
-      <p><a href="/post">EVENT LIST</a></p>
-      <p><a href="/post/add">ADD EVENT</a></p>
-      <p><a href="/my">MY</a></p>
-      <p><a href="/auth/logout">LOGOUT</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/post">EVENT LIST</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/post/add">ADD EVENT</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/my">MY</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/auth/logout">LOGOUT</a></p>
       <% } %>
     </nav>
     <main>
       <h1>LOGIN</h1>
-      <form action="/auth/login" method="post">
+      <form action="https://www.doc.gold.ac.uk/usr/113/auth/login" method="post">
         <input type="text" name="username" placeholder="username" />
         <input type="password" name="password" placeholder="password" />
         <input type="submit" value="login" />
       </form>
-      <a href="/forgot-password">forgot password?</a>
-      <a href="/register">register</a>
+      <a href="https://www.doc.gold.ac.uk/usr/113/forgot-password">forgot password?</a>
+      <a href="https://www.doc.gold.ac.uk/usr/113/register">register</a>
     </main>
     <script>
       window.onload = () => {

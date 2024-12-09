@@ -10,15 +10,15 @@
       <h1><a href="/"> <%=shopData.shopName%> </a></h1>
       <% if(!user) { %>
       <p>
-        <a href="/login">LOGIN</a> /
-        <a href="/register">REGISTER</a>
+        <a href="https://www.doc.gold.ac.uk/usr/113/login">LOGIN</a> /
+        <a href="https://www.doc.gold.ac.uk/usr/113/register">REGISTER</a>
       </p>
 
       <% } else { %>
-      <p><a href="/post">EVENT LIST</a></p>
-      <p><a href="/post/add">ADD EVENT</a></p>
-      <p><a href="/my">MY</a></p>
-      <p><a href="/auth/logout">LOGOUT</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/post">EVENT LIST</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/post/add">ADD EVENT</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/my">MY</a></p>
+      <p><a href="https://www.doc.gold.ac.uk/usr/113/auth/logout">LOGOUT</a></p>
       <% } %>
     </nav>
     <main>
@@ -38,7 +38,7 @@
         }
         if (new URL(location.href).searchParams.get("pwd")) {
           alert(`Password : ${new URL(location.href).searchParams.get("pwd")}`);
-          location.href = "/login";
+          location.href = "https://www.doc.gold.ac.uk/usr/113/login";
         }
       };
     </script>
