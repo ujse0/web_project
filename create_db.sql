@@ -59,3 +59,7 @@ CREATE TABLE IF NOT EXISTS chat (
 --     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 --     FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
 -- );
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '0000';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
+FLUSH PRIVILEGES;

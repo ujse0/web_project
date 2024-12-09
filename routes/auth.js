@@ -20,9 +20,9 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
         "INSERT INTO user (user_name, pwd, origin_pwd, password_sentence, introduce) VALUES (?, ?, ?, ?, ?)",
         [username, hash, password, password_sentence, introduce]
       );
-      res.redirect("http://localhost:8000/login");
+      res.redirect("/login");
     } else {
-      return res.redirect("http://localhost:8000/register?error=exist");
+      return res.redirect("/register?error=exist");
     }
   } catch (err) {
     console.error(err);
@@ -37,14 +37,14 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      return res.redirect(`http://localhost:8000/?loginError=${info.message}`);
+      return res.redirect(`/?loginError=${info.message}`);
     }
     return req.login(user, (loginError) => {
       if (loginError) {
         console.error(loginError);
         return next(loginError);
       }
-      return res.redirect("http://localhost:8000/");
+      return res.redirect("/");
     });
   })(req, res, next);
 });
@@ -57,7 +57,7 @@ router.get("/logout", isLoggedIn, (req, res, next) => {
     req.session.destroy(() => {
       req.session;
     });
-    res.redirect("http://localhost:8000/");
+    res.redirect("/");
   });
 });
 

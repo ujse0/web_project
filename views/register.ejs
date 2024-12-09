@@ -10,20 +10,20 @@
       <h1><a href="/"> <%=shopData.shopName%> </a></h1>
       <% if(!user) { %>
       <p>
-        <a href="http://localhost:8000/login">LOGIN</a> /
-        <a href="http://localhost:8000/register">REGISTER</a>
+        <a href="/login">LOGIN</a> /
+        <a href="/register">REGISTER</a>
       </p>
 
       <% } else { %>
-      <p><a href="http://localhost:8000/post">EVENT LIST</a></p>
-      <p><a href="http://localhost:8000/post/add">ADD EVENT</a></p>
-      <p><a href="http://localhost:8000/my">MY</a></p>
-      <p><a href="http://localhost:8000/auth/logout">LOGOUT</a></p>
+      <p><a href="/post">EVENT LIST</a></p>
+      <p><a href="/post/add">ADD EVENT</a></p>
+      <p><a href="/my">MY</a></p>
+      <p><a href="/auth/logout">LOGOUT</a></p>
       <% } %>
     </nav>
     <main>
       <h1>REGISTER</h1>
-      <form action="http://localhost:8000/auth/register" method="post">
+      <form action="/auth/register" method="post">
         <input type="text" name="username" placeholder="username" />
         <input type="password" name="password" placeholder="password" />
         <h3>input brith date as YYMMDD.</h3>
@@ -44,7 +44,7 @@
         <input type="submit" value="REGISTER" />
       </form>
       <div style="margin-top: 20px">
-        if you have id? <a href="http://localhost:8000/login">LOGIN</a>
+        if you have id? <a href="/login">LOGIN</a>
       </div>
     </main>
   </body>

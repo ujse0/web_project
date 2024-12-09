@@ -7,7 +7,7 @@ router.use((req, res, next) => {
 });
 const guard = (req, res, next) => {
   if (!req.user) {
-    return res.redirect("http://localhost:8000/login?error=session_expired");
+    return res.redirect("/login?error=session_expired");
   }
   next();
 };
@@ -65,7 +65,7 @@ router.post("/my/update", guard, async (req, res) => {
   const updateQuery = "update user set introduce=? where user_name=?";
   try {
     await db.query(updateQuery, [introduce, username]);
-    res.redirect("http://localhost:8000/my");
+    res.redirect("/my");
   } catch (err) {
     console.log(err);
     res.status(500).send("Error updating user");
@@ -92,13 +92,13 @@ router.post("/forgot", (req, res) => {
         : (isEqual = false);
       if (isEqual) {
         res.redirect(
-          `http://localhost:8000/forgot-password?pwd=${result[0].origin_pwd}`
+          `/forgot-password?pwd=${result[0].origin_pwd}`
         );
       } else {
-        res.redirect("http://localhost:8000/forgot-password?error=wrong-date");
+        res.redirect("/forgot-password?error=wrong-date");
       }
     } else {
-      res.redirect("http://localhost:8000/forgot-password?error=not-found-id");
+      res.redirect("/forgot-password?error=not-found-id");
     }
   });
 });
@@ -150,7 +150,7 @@ router.post("/apply/delete/:id", guard, (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.redirect(`http://localhost:8000/post/${req.params.id}`);
+        res.redirect(`/post/${req.params.id}`);
       }
     }
   );
@@ -158,7 +158,7 @@ router.post("/apply/delete/:id", guard, (req, res) => {
 router.post("/participant/delete/:id", guard, (req, res) => {
   if (req.body.username == req.user.user_name) {
     res.redirect(
-      `http://localhost:8000/post/update/${req.params.id}?error=Event-Holder-cannot-be-deleted`
+      `/post/update/${req.params.id}?error=Event-Holder-cannot-be-deleted`
     );
   } else {
     const userExistQuery =
@@ -169,7 +169,7 @@ router.post("/participant/delete/:id", guard, (req, res) => {
       (err, result1) => {
         if (result1.length < 1) {
           res.redirect(
-            `http://localhost:8000/post/update/${req.params.id}?error=User-Not_Exist-In-Event`
+            `/post/update/${req.params.id}?error=User-Not_Exist-In-Event`
           );
         } else {
           const deleteParticipantQuery =
@@ -182,7 +182,7 @@ router.post("/participant/delete/:id", guard, (req, res) => {
                 console.log(err);
               } else {
                 res.redirect(
-                  `http://localhost:8000/post/update/${req.params.id}`
+                  `/post/update/${req.params.id}`
                 );
               }
             }
@@ -202,7 +202,7 @@ router.post("/participant/:id", guard, (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.redirect(`http://localhost:8000/post/${req.params.id}`);
+        res.redirect(`/post/${req.params.id}`);
       }
     }
   );
