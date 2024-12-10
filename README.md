@@ -176,16 +176,3 @@ docker-compose up -d
 npm start
 ```
 
-URL
-
-http://ec2-35-179-88-45.eu-west-2.compute.amazonaws.com:8000/
-
-Username: a Password: a 
-
-or 
-
-Username: b Password: b
-
-or 
-
-Username: test Password: test
